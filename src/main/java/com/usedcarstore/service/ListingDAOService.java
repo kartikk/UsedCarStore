@@ -1,19 +1,23 @@
 package com.usedcarstore.service;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.stereotype.Service;
+
+import com.usedcarstore.db.ConnectionManager;
 import com.usedcarstore.model.Listing;
 
+@Service
 public class ListingDAOService {
-	private static final String USERNAME = "harish";
-	private static final String PASSWORD = "Mysore98!";
-	private static final String JDBC_ORACLE_CONN = "jdbc:oracle:thin:@oracle.cise.ufl.edu:1521:orcl";
 
 	private static final String TITLE = "TITLE";
 	private static final String DATE_CREATED = "DATE_CREATED";
@@ -21,16 +25,25 @@ public class ListingDAOService {
 	private static final String EMAIL = "EMAIL_ID";
 	private static final String PRICE = "PRICE";
 	private static final String REGISTRATION_NUMBER = "REGISTRATION_NUMBER";
+	
+	@Autowired
+	private ConnectionManager connectionManager;
 
 	public ListingDAOService() {
 
 	}
+	
+
 
 	public List<Listing> getListings(final String key) {
 		List<Listing> listings = new ArrayList<Listing>();
 		Connection connection = null;
 		try {
-			connection = DriverManager.getConnection(JDBC_ORACLE_CONN, USERNAME, PASSWORD);
+//			connection = DriverManager.getConnection(JDBC_ORACLE_CONN, USERNAME, PASSWORD);
+		
+			DataSource dataSource = connectionManager.getDataSource();
+			connection = dataSource.getConnection();
+			
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("select * from LISTING WHERE TITLE LIKE  " + "'%" + key + "%'");
 			while (rs.next()) {
