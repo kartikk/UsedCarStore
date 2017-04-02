@@ -1,0 +1,6 @@
+com\usedcarstore\controller\WebController.class
+com\usedcarstore\UserCarStoreApp.class
+com\usedcarstore\db\ConnectionManager.class
+com\usedcarstore\model\Listing.class
+com\usedcarstore\service\ListingDAOService.class
+com\usedcarstore\config\DefaultView.class
